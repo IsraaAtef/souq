@@ -2,6 +2,20 @@
                         <label for="name" class="form-label">Name</label>
                         <input type="text" name="name" class="form-control" id="name" value="{{ old('name',$product->name) }}"/>
                       </div>
+                       <div class="mb-3">
+                        <label for="image_path" class="form-label">Image</label>
+                        <input
+                          type="file"
+                          name="image_path"
+                          class="form-control"
+                          id="image_path"
+                          accept=".jpg,.png"
+                          value="{{ old('image_path',$product->image_path) }}"
+                        />
+                        @if($product->image_path)
+                            <img src="{{ $product->image_url  }}" height="100" alt="$product->name">
+                        @endif
+                      </div>
                       <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea  id="description" name="description" cols="" rows="" class="form-control" aria-label="With textarea">{{ old('description',$product->description) }}</textarea>

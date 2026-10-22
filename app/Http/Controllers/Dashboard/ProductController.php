@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -51,7 +52,8 @@ class ProductController extends Controller
             'description' => 'string|nullable',
             'price' => 'numeric|required|min:0',
             'store_id' => 'required|exists:stores,id',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'image_path' =>'nullable|file|image'
         ]);
 
         $name = $request->name;
@@ -62,6 +64,18 @@ class ProductController extends Controller
         while(Product::where('slug',$slug)->exists()){
             $slug = $old_slug . '-' . $count;
             $count++;
+        }
+
+        $image_path = null;
+
+        if($request->hasFile('image_path')){
+            $image = $request->file('image_path');
+            $time = now()->format('Y-m-d_H-i-s');
+            $image_name = $time . '_' . uniqid() . '.' . $image->extension();
+            $image_path = $image->storeAs('products',$image_name,'public');
+            $request->merge([
+                'image_path' => $image_path
+            ]);
         }
 
         $request->merge(['slug' => $slug]);
@@ -101,7 +115,9 @@ class ProductController extends Controller
             'description' => 'string|nullable',
             'price' => 'numeric|required|min:0',
             'store_id' => 'required|exists:stores,id',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'image_path' =>'file|image|nullable'
+
         ]);
 
         $name = $request->name;
@@ -117,6 +133,23 @@ class ProductController extends Controller
 
         $request->merge(['slug' => $slug]);
         }
+
+         $image_path = null;
+
+        $image_old = $product->image_path;
+        if($request->hasFile('image_path')){
+            $image = $request->file('image_path');
+            $time = now()->format('Y-m-d_H-i-s');
+            $image_name = $time . '_' . uniqid() . '.' . $image->extension();
+            $image_path = $image->storeAs('products',$image_name,'public');
+            if($image_path && $image_old){
+                Storage::disk('public')->delete($image_old);
+            }
+            $request->merge([
+                'image_path' => $image_path
+            ]);
+        }
+
         $product->update($request->all());
     
 
@@ -129,7 +162,11 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+         $image_old = $product->image_path;
          $product->delete();
+         if($image_old){
+                Storage::disk('public')->delete($image_old);
+        }
         return redirect()->route('dashboard.products.index')->with('error','تم حذف الصنف ');
     }
 }

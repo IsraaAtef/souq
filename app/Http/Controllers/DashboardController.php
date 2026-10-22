@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         
-        return view('layout.dashboard');
+        return view('layout.index');
        // return redirect()->route('dashboard.table');
     }
 

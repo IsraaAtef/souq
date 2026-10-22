@@ -42,7 +42,7 @@
                   </div>
                   <!--end::Header-->
                   <!--begin::Form-->
-                  <form action="{{ route('dashboard.products.update',$product->id) }}" method="POST">
+                  <form action="{{ route('dashboard.products.update',$product->id) }}" method="POST" enctype="multipart/form-data">
                     <!--begin::Body-->
                     @csrf
                     @method('PUT')

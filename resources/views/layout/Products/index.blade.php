@@ -76,7 +76,9 @@
                         @forelse($products as $product)
                           <tr class="align-middle">
                           <td>{{ $product->id }}</td>
-                          <td>{{ $product->name }}</td>
+                          <td>
+                           <img src="{{ $product->image_url  }}" height="50" alt="">  
+                          {{ $product->name }}</td>
                           <td>
                              {{ $product->price}}     
                           </td>

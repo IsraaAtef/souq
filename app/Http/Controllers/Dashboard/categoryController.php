@@ -52,12 +52,7 @@ class categoryController extends Controller
      */
     public function store(Request $request)
     {
-       dd([
-    'has_file' => $request->hasFile('image_path'),
-    'file' => $request->file('image_path'),
-    'error' => $request->file('image_path')?->getError(),
-    'error_message' => $request->file('image_path')?->getErrorMessage(),
-]);
+    
         //validate
         $request->validate([
                 'name' => 'string|max:255|required',

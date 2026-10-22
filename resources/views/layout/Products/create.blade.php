@@ -42,7 +42,7 @@
                   </div>
                   <!--end::Header-->
                   <!--begin::Form-->
-                  <form action="{{ route('dashboard.products.store') }}" method="post">
+                  <form action="{{ route('dashboard.products.store') }}" method="post" enctype="multipart/form-data">
                     <!--begin::Body-->
                     @csrf
                     <div class="card-body">
